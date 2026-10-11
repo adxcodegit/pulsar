@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f2f2ee">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -43,7 +43,11 @@
 
 /* ===================== BASE ===================== */
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation;height:100%}
+/* App feel: no long-press text selection, magnifier or iOS callout menu, except where you type */
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,select,[contenteditable]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+img,svg,a{-webkit-user-drag:none}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   background:var(--bg);color:var(--text);font-size:16px;line-height:1.4;-webkit-font-smoothing:antialiased;
   overflow-x:hidden;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
@@ -63,7 +67,7 @@ h1,h2,h3,p{margin:0}
 .between{justify-content:space-between}
 .mt{margin-top:12px}.mt2{margin-top:20px}.mb{margin-bottom:12px}
 
-#app{max-width:600px;margin:0 auto;min-height:100vh;padding-left:var(--sal);padding-right:var(--sar)}
+#app{max-width:600px;margin:0 auto;min-height:100vh;min-height:100dvh;padding-left:var(--sal);padding-right:var(--sar)}
 header.top{position:relative;z-index:2;padding:calc(var(--sat) + 4px) 16px 2px}
 @supports (backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px)){
 }
@@ -96,7 +100,6 @@ main{padding:4px 16px calc(var(--nav-space) + 20px);outline:none}
   box-shadow:0 10px 26px rgba(0,0,0,.24),0 1px 3px rgba(0,0,0,.12);transition:transform .15s}
 .navfab:active{transform:scale(.9)}
 .navfab .ic{width:28px;height:28px;stroke-width:2.4}
-@media (max-width:350px){:root{--nav-h:58px}.tabs .inner{gap:6px}.tab{font-size:9.5px}}
 
 /* ===================== COMPONENTS ===================== */
 .card{background:var(--surface);border-radius:var(--r);padding:16px;margin:0 0 12px;box-shadow:var(--shadow);border:1px solid var(--line)}
@@ -404,7 +407,6 @@ body.has-mini{--nav-space:calc(var(--nav-h) + var(--nav-gap) + 72px)}
 .mac-h{display:flex;flex-wrap:wrap;justify-content:space-between;column-gap:6px;font-size:14px;margin:0 0 5px}
 .mac-h .n{font-weight:600}
 .nut-f{display:flex;align-items:center;gap:8px;margin:12px 0 -6px;padding-top:6px;border-top:1px solid var(--line);min-height:44px}
-@media (max-width:360px){.ring-w{width:104px;height:104px}.ring-c .big{font-size:24px}.nut .nut-top{gap:14px}}
 
 /* ===================== NEXT UP ===================== */
 .next{background:linear-gradient(140deg,color-mix(in srgb,var(--accent) 13%,var(--surface)),var(--surface) 72%)}
@@ -436,10 +438,35 @@ body.has-mini{--nav-space:calc(var(--nav-h) + var(--nav-gap) + 72px)}
 .pop{animation:pop .36s cubic-bezier(.3,1.6,.5,1)}
 @keyframes pop{40%{transform:scale(1.2)}}
 
+/* ===================== FLUID SIZING (scales smoothly from 320px phones to tablets) ===================== */
+:root{--nav-h:clamp(56px,15.5vw,64px)}
+#title{font-size:clamp(26px,8.4vw,36px)}
+.big{font-size:clamp(28px,8.8vw,38px)}
+.ring-w{width:clamp(100px,31vw,136px);height:clamp(100px,31vw,136px)}
+.ring-c .big{font-size:clamp(22px,7.2vw,30px)}
+.ring-c{padding:0 14%}
+.ring-c .tiny{font-size:clamp(10px,3vw,13px);white-space:nowrap}
+.nut .nut-top{gap:clamp(12px,4.4vw,22px)}
+.next-t{font-size:clamp(20px,6.2vw,26px)}
+.next-go{padding:0 clamp(14px,5vw,22px)}
+.tab{font-size:clamp(9.5px,2.75vw,11.5px)}
+.tabs .inner{gap:clamp(6px,2vw,10px)}
+.wk-n{font-size:clamp(15px,4.4vw,18px)}
+.wk-d{min-height:clamp(60px,17vw,70px)}
+.hb{width:clamp(66px,19vw,80px)}
+.qa,.btn{-webkit-tap-highlight-color:transparent}
+@media (orientation:landscape) and (max-height:500px){
+  /* phone on its side: tighter header so content still fits */
+  #title{font-size:26px}
+  .wk-d{min-height:56px}
+  :root{--nav-h:54px}
+}
+@media (min-width:700px){ #app,.tabs .inner,#mini{max-width:640px} }
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
 }
-@media (min-width:640px){ .sheet{border-radius:22px;bottom:calc(var(--kb) + 16px)} }
+@media (min-width:640px) and (min-height:600px){ .sheet{border-radius:22px;bottom:calc(var(--kb) + 16px)} }
 </style>
 </head>
 <body>
@@ -3139,15 +3166,40 @@ async function switchMode(mode){
   if (mode === 'real' && !S.settings.onboarded) openOnboarding();
   const a = activeSession(); if (a) openWorkout(a.id, 'active');
 }
+const isTyping = () => { const a = document.activeElement; return !!(a && a.matches && a.matches('input:not([type=date]):not([type=file]),textarea,select')); };
 function setupViewport(){
-  const vv = window.visualViewport;
+  const vv = window.visualViewport, root = document.documentElement.style;
+  let raf = 0, last = '';
   const upd = () => {
-    const root = document.documentElement.style;
-    if (vv){ root.setProperty('--kb', Math.max(0, window.innerHeight - vv.height - vv.offsetTop) + 'px'); root.setProperty('--vvh', vv.height + 'px'); }
-    else root.setProperty('--vvh', window.innerHeight + 'px');
+    raf = 0;
+    const zoomed = vv && vv.scale > 1.01;
+    // Only treat lost height as the keyboard while you are typing and not zoomed in.
+    // (Previously a pinch or double-tap zoom shrank the visual viewport and made sheets jump.)
+    const kb = vv && !zoomed && isTyping() ? Math.max(0, Math.round(window.innerHeight - vv.height - vv.offsetTop)) : 0;
+    const vh = Math.round(vv && !zoomed ? vv.height : window.innerHeight);
+    const key = kb + '|' + vh;
+    if (key === last) return;
+    last = key;
+    root.setProperty('--kb', kb + 'px');
+    root.setProperty('--vvh', vh + 'px');
   };
-  if (vv){ vv.addEventListener('resize', upd); vv.addEventListener('scroll', upd); }
-  window.addEventListener('resize', upd); upd();
+  const queue = () => { if (!raf) raf = requestAnimationFrame(upd); };
+  if (vv){ vv.addEventListener('resize', queue); vv.addEventListener('scroll', queue); }
+  window.addEventListener('resize', queue);
+  window.addEventListener('orientationchange', () => { setTimeout(() => { queue(); moveTabInd(); }, 250); });
+  document.addEventListener('focusout', () => setTimeout(() => {
+    queue();
+    // iOS sometimes leaves the page shifted after the keyboard closes; settle it back.
+    if (!isTyping() && vv && vv.scale <= 1.01 && (vv.offsetTop > 0 || window.scrollY < 0)) window.scrollTo(window.scrollX, window.scrollY);
+  }, 60));
+  document.addEventListener('focusin', queue);
+  upd();
+  // Keep the tab highlight glued to its tab through any size, rotation or font change.
+  if ('ResizeObserver' in window){ const ro = new ResizeObserver(() => moveTabInd()); ro.observe($('#navInner')); }
+  // No long-press menu on app surfaces (text fields keep theirs).
+  document.addEventListener('contextmenu', e => { if (!(e.target.closest && e.target.closest('input,textarea,select,[contenteditable]'))) e.preventDefault(); });
+  // Block iOS pinch/double-tap gesture zoom so the layout never ends up half-zoomed.
+  for (const ev of ['gesturestart','gesturechange']) document.addEventListener(ev, e => e.preventDefault(), { passive:false });
   // keep focused inputs visible above the keyboard inside sheets
   document.addEventListener('focusin', e => {
     const t = e.target;
